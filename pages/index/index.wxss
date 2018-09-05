@@ -29,3 +29,14 @@ page {
 	text-align: center;
 	line-height: 80rpx;
 }
+
+button {
+	width: 300rpx;
+	height: 300rpx;
+	margin: 100rpx 0;
+	border-radius: 150rpx;
+	line-height: 300rpx;
+	text-align: center;
+	font-size: 26rpx;
+	background: pink;
+}
