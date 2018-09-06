@@ -7,7 +7,8 @@ Page({
    */
   data: {
 		detailObj: {},
-		index: null
+		index: null,
+		isCollected: false
   },
 
   /**
@@ -21,7 +22,50 @@ Page({
 			detailObj: listData.list_data[index],
 			index
 		});
+
+		// 获取本地缓存的数据
+		wx.getStorage({
+			key: 'isCollected',
+			success: (msg) => {
+				console.log(msg);
+				this.setData({
+					isCollected: msg.data[index]
+				})
+			}
+		})
   },
+	handleCollection(){
+		let isCollected = !this.data.isCollected;
+		// React中修改状态是异步的，可以在第二个回调中获取修改完的状态
+		// this.setState({
+		// 	msg: 123
+		// })
+		// console.log(this.state.msg);
+		this.setData({
+			isCollected
+		}, () => {
+			console.log('修改状态成功');
+			
+		});
+
+		let title = isCollected ? '收藏成功' : '取消收藏';
+		// 设置提示功能
+		wx.showToast({
+			icon: 'success',
+			title
+		})
+		// 将数据缓存到本地
+		// 准备缓存的数据
+		// let obj = {0: true, 1: false, 2: true};
+		let index = this.data.index;
+		let obj = wx.getStorageSync('isCollected');
+		console.log(obj, 'xxxxxxxx');
+		// 预处理工作，防止用户第一次点击收藏按钮，此时obj为空，
+		!obj && (obj = {});
+		obj[index] = isCollected;
+		wx.setStorageSync('isCollected', obj);
+
+	},
 
   /**
    * 生命周期函数--监听页面初次渲染完成
